@@ -6,22 +6,18 @@
   var mm = require('musicmetadata');
   var root = '../../Desktop/music/'
 
-  angular.module('app')
-  .directive('musicList', directive)
+  factory.$inject = [];
 
-  function directive () {
+  angular.module('app')
+  .factory('musicData', factory)
+
+  function factory () {
     return {
-      templateUrl: './musicList.dir.html',
-      controller,
-      controllerAs: 'vm'
+      musicList,
     }
 
-    function controller ($scope) {
-      let vm = this
-      parse(readDir(root)).then(function(list){
-        vm.list = list
-        $scope.$apply()
-      })
+    function musicList () {
+      return parse(readDir(root))
     }
 
     function parse (musicList) {
@@ -58,11 +54,8 @@
           } else musicList.push( dir + list[i] )
         }
       }
-
       return musicList
     }
-
-
   }
 
 
