@@ -10,6 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "electron-prebuilt": "^1.2.5"
+    "electron-prebuilt": "^1.2.5",
+    "id3": "0.0.3",
+    "id3js": "^1.1.3",
+    "musicmetadata": "^2.0.4"
   }
 }

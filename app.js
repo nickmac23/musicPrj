@@ -1,7 +1,26 @@
-document.write('heelllo' + process.version)
+(function() {
+  'use strict';
 
-var fs = require('fs')
+  var dependencies = [
+    'ui.router'
+  ]
+  angular.module('app', dependencies)
+  .config(routes)
 
-var contents = fs.readFileSync('./package.json')
+  routes.$inject = [
+    '$stateProvider',
+    '$urlRouterProvider',
+    '$locationProvider',
+    '$httpProvider'];
 
-alert(contents)
+  function routes($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider){
+   // $locationProvider.html5Mode(true);
+  //  $urlRouterProvider.otherwise("/");
+  //  $stateProvider
+  //    .state('home', {
+  //      url: "/",
+  //      template: "<posts></posts>"
+  //    })
+   }
+
+}());
