@@ -24,11 +24,14 @@
       socketRoom = roomName
       socket.emit('server', {room: socketRoom, to: 'electron', info: 'electron connected'})
       socket.on(socketRoom + 'electron', function (data) {
-        console.log(data);
-        musicList().then(music => {
-          var musicData = JSON.stringify(music)
-          socket.emit('server', {info: music, room: socketRoom, to: 'client'})
-        })
+        if(data != 'client wants data!'){
+            socket.emit('server', {info: 'song playing!', room: socketRoom, to: 'client'})
+        } else {
+          musicList().then(music => {
+            var musicData = JSON.stringify(music)
+            socket.emit('server', {info: music, room: socketRoom, to: 'client'})
+          })
+        }
       })
     }
 
