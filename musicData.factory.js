@@ -6,12 +6,19 @@
   var mm = require('musicmetadata');
   var root = '../../Desktop/music/'
 
-  factory.$inject = [];
+  factory.$inject = ['$http'];
 
   angular.module('app')
   .factory('musicData', factory)
 
-  function factory () {
+  function factory ($http) {
+    // var socket = io.connect('http://localhost:3000');
+    // socket.on('client', function (data) {
+    //   musicList().then(music => {
+    //     var musicData = JSON.stringify(music)
+    //     socket.emit('everyone', music)
+    //   })
+    // })
     return {
       musicList,
     }
@@ -22,13 +29,14 @@
 
     function parse (musicList) {
       var list = []
+      var music;
+
       for (let i = 0; i < musicList.length; i++) {
-        var music = musicList[i]
         list.push(new Promise(function (resolve, reject) {
           mm(fs.createReadStream(musicList[i]), function (err, metadata) {
             if (err) return reject(err);
             var musicObj = {
-              path: music,
+              path: musicList[i],
               title: metadata.title,
               genre: metadata.genre,
               album: metadata.album,

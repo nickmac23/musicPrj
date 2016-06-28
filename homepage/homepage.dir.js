@@ -5,7 +5,7 @@
   .directive('home', directive)
   function directive () {
     return {
-      templateUrl: './musicList.dir.html',
+      templateUrl: './homepage/homepage.dir.html',
       controller,
       controllerAs: 'vm',
     }
