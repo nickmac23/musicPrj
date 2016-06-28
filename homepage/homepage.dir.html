@@ -10,6 +10,12 @@
       </button>
       <a class="navbar-brand" href="#">MusicPrj</a>
     </div>
+    <audio class='nav navbar-nav' id='audio' controls ng-hide='true'>
+      <source src="" type="audio/ogg">
+      <source src="" type="audio/mpeg">
+      Your browser does not support the audio tag.
+    </audio>
+
 
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
       <form class="navbar-form navbar-right" ng-submit='vm.setRoom(vm.room)' ng-hide='vm.socketRoom'>
@@ -31,7 +37,7 @@
     </tr>
   </thead>
   <tbody ng-repeat='music in vm.list track by $index'>
-    <tr>
+    <tr ng-click='vm.playSong(music.path)'>
       <td>{{music.title}}</td>
       <td ng-repeat='artist in music.artist'>{{artist}}</td>
       <td>{{music.album}}</td>

@@ -18,14 +18,18 @@
     return {
       musicList,
       setRoom,
+      playSong,
     }
 
     function setRoom (roomName) {
       socketRoom = roomName
-      socket.emit('server', {room: socketRoom, to: 'electron', info: 'electron connected'})
+      // socket.emit('server', {room: socketRoom, to: 'electron', info: 'electron connected'})
       socket.on(socketRoom + 'electron', function (data) {
         if(data != 'client wants data!'){
-            socket.emit('server', {info: 'song playing!', room: socketRoom, to: 'client'})
+          var music = document.getElementById('audio')
+          music.src = data;
+          music.play()
+          socket.emit('server', {info: 'song playing!', room: socketRoom, to: 'client'})
         } else {
           musicList().then(music => {
             var musicData = JSON.stringify(music)
@@ -33,6 +37,12 @@
           })
         }
       })
+    }
+
+    function playSong (path) {
+      var music = document.getElementById('audio')
+      music.src = path;
+      music.play()
     }
 
     function musicList () {

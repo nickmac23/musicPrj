@@ -14,11 +14,16 @@
       let vm = this
       vm.socketRoom = false
       vm.setRoom = setRoom;
+      vm.playSong = playSong;
+
       musicData.musicList().then(function(data) {
         vm.list = data
         $scope.$apply()
       })
 
+      function playSong (path) {
+        musicData.playSong(path)
+      }
       function setRoom (data) {
         vm.socketRoom = true
         musicData.setRoom(data)
