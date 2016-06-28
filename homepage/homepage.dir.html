@@ -1,4 +1,9 @@
 <div>
+  <form ng-submit='vm.setRoom(vm.room)' ng-hide='vm.socketRoom'>
+    <input type="text"  ng-model='vm.room' name='socketRoom'>
+    <button type='submit'>Add a Dir</button>
+  </form>
+
   <div ng-repeat='music in vm.list track by $index'>
     <li>{{music.path}}</li>
   </div>

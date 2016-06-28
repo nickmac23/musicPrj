@@ -4,7 +4,8 @@
   var fs = require('fs')
   var audioMetaData = require('audio-metadata')
   var mm = require('musicmetadata');
-  var root = '../../Desktop/music/'
+  var root = '../../../Desktop/music/'
+  var socketRoom = ''
 
   factory.$inject = ['$http'];
 
@@ -12,15 +13,23 @@
   .factory('musicData', factory)
 
   function factory ($http) {
-    // var socket = io.connect('http://localhost:3000');
-    // socket.on('client', function (data) {
-    //   musicList().then(music => {
-    //     var musicData = JSON.stringify(music)
-    //     socket.emit('everyone', music)
-    //   })
-    // })
+    var socket = io.connect('http://localhost:3000');
+
     return {
       musicList,
+      setRoom,
+    }
+
+    function setRoom (roomName) {
+      socketRoom = roomName
+      socket.emit('server', {room: socketRoom, to: 'electron', info: 'electron connected'})
+      socket.on(socketRoom + 'electron', function (data) {
+        console.log(data);
+        musicList().then(music => {
+          var musicData = JSON.stringify(music)
+          socket.emit('server', {info: music, room: socketRoom, to: 'client'})
+        })
+      })
     }
 
     function musicList () {
