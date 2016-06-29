@@ -5,7 +5,9 @@
   var audioMetaData = require('audio-metadata')
   var mm = require('musicmetadata');
   var root = '../../../Desktop/music/'
-  var socketRoom = ''
+  var socketRoom = '';
+  var musicAll;
+  var i = 0;
 
   factory.$inject = ['$http'];
 
@@ -13,7 +15,9 @@
   .factory('musicData', factory)
 
   function factory ($http) {
-    var socket = io.connect('http://localhost:3000');
+    var socket = io.connect('https://fathomless-falls-33454.herokuapp.com/');
+    var music = document.getElementById('audio');
+
 
     return {
       musicList,
@@ -23,30 +27,55 @@
 
     function setRoom (roomName) {
       socketRoom = roomName
-      // socket.emit('server', {room: socketRoom, to: 'electron', info: 'electron connected'})
       socket.on(socketRoom + 'electron', function (data) {
         if(data != 'client wants data!'){
-          var music = document.getElementById('audio')
-          music.src = data;
-          music.play()
+          playSong(data)
           socket.emit('server', {info: 'song playing!', room: socketRoom, to: 'client'})
         } else {
-          musicList().then(music => {
-            var musicData = JSON.stringify(music)
-            socket.emit('server', {info: music, room: socketRoom, to: 'client'})
-          })
+            socket.emit('server', {info: musicAll, room: socketRoom, to: 'client'})
         }
       })
     }
 
-    function playSong (path) {
-      var music = document.getElementById('audio')
-      music.src = path;
-      music.play()
+    function playSong (command) {
+      switch (command.command) {
+        case 'next':
+          i++
+          if (i > musicAll.length - 1) i = 0
+          music.src = musicAll[i].path
+          music.play()
+          break;
+        case 'back':
+          i--
+          if (i < 0) i = musicAll.length -1
+          music.src = musicAll[i].path
+          music.play()
+          break;
+        case 'space':
+          switch (music.paused) {
+            case true:
+              if (!music.src) {
+                music.src = musicAll[i].path
+              }
+              music.play()
+              break;
+            case false:
+              music.pause()
+              break;
+          }
+          break;
+        case 'play':
+          if (command.index) i = command.index
+          music.src = command.path;
+          music.play()
+          break;
+      }
+      console.log(i);
     }
 
+
     function musicList () {
-      return parse(readDir(root))
+      return parse(readDir(root)).then(music => musicAll = music)
     }
 
     function parse (musicList) {
@@ -59,6 +88,7 @@
             if (err) return reject(err);
             var musicObj = {
               path: musicList[i],
+              index: i,
               title: metadata.title,
               genre: metadata.genre,
               album: metadata.album,
