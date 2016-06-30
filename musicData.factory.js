@@ -7,6 +7,7 @@
   var socketRoom = '';
   var musicAll;
   var i = 0;
+  var state = {}
 
   factory.$inject = ['$rootScope'];
 
@@ -16,7 +17,6 @@
   function factory ($rootScope) {
     var socket = io.connect('https://fathomless-falls-33454.herokuapp.com/');
     var music = document.getElementById('audio');
-    var state = {}
 
     return {
       musicList,
@@ -96,13 +96,14 @@
       }
       if(command.command) {
         var index = index || i
-        var obj = musicAll[index]
-        state = obj;
-        obj.command = play
-        obj.from = command.from
+        state.music = musicAll[index]
+        state.command = play
+        state.from = command.from
+        state.order = !!command.order ? command.order : state.order
+        console.log(state.order);
         if (command.from === "socket") $rootScope.$apply()
-          socket.emit('server', {info: obj, room: socketRoom, to: 'client'})
-        return obj
+          socket.emit('server', {info: state.music, room: socketRoom, to: 'client'})
+        return state
       }
     }
 

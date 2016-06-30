@@ -23,7 +23,6 @@
           return musicData.stater()
         },
         function (newState) {
-          console.log("sstats", newState);
           vm.state = newState;
         }, true);
 
@@ -33,6 +32,7 @@
       })
 
       document.addEventListener('keydown', function (e){
+        console.log(vm.state);
         var obj = {}
         switch (e.which) {
           case 39:
