@@ -34,13 +34,19 @@
       })
     }
 
+
     function playSong (command) {
+      var listed = document.getElementById('nick').getAttribute('value')
       if(command.path) i = command.pageIndex
       var play;
       switch (command.command) {
+        case 'reset':
+          i = -1
+          return command.by
+          break;
         case 'next':
           i++
-          if (i > musicAll.length - 1) i = 0
+          if (i > listed - 1) i = 0
           var next = document.getElementById(i)
           next.getAttribute('path')
           var index = next.getAttribute('index')
@@ -50,7 +56,7 @@
           break;
         case 'back':
           i--
-          if (i < 0) i = musicAll.length -1
+          if (i < 0) i = listed -1
           var back = document.getElementById(i)
           back.getAttribute('path')
           var index = back.getAttribute('index')
@@ -62,7 +68,9 @@
           switch (music.paused) {
             case true:
               if (!music.src) {
-                music.src = musicAll[i].path
+                var now = document.getElementById(0)
+                music.src = now.getAttribute('path')
+                var index = now.getAttribute('index')
               }
               music.play()
               play = 'playing'
@@ -74,18 +82,16 @@
           }
           break;
         case 'play':
-        console.log(command);
           var index = command.index
           music.src = command.path;
           music.play()
           play = 'playing'
           break;
       }
-
-      if(index >= 0) {
+      if(command.command) {
+        var index = index || i
         var obj = musicAll[index]
         obj.command = play
-        console.log(obj);
           socket.emit('server', {info: obj, room: socketRoom, to: 'client'})
         return obj
       }

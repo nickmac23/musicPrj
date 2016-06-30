@@ -16,12 +16,13 @@
       vm.setRoom = setRoom;
       vm.playSong = playSong;
       vm.orderby = orderby;
+      vm.search = '$';
       // vm.dirUpload = dirUpload;
       var music = document.getElementById('audio');
-
       music.addEventListener('ended', function() {
         musicData.playSong({command: 'next'})
       })
+
       document.addEventListener('keydown', function (e){
         var obj = {}
         switch (e.which) {
@@ -43,7 +44,6 @@
       root.addEventListener('change', function () {
 
         var dir = root.files[0].path +  '/'
-        console.log(dir);
         musicData.musicList(dir).then(function(data) {
           vm.list = data
           $scope.$apply()
@@ -51,7 +51,7 @@
       })
 
       function orderby (by) {
-        vm.order = by;
+        vm.order = musicData.playSong({command: 'reset', by: by})
       }
 
       function playSong (path) {
