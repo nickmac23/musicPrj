@@ -8,19 +8,25 @@
   var musicAll;
   var i = 0;
 
-  factory.$inject = ['$http'];
+  factory.$inject = ['$rootScope'];
 
   angular.module('app')
   .factory('musicData', factory)
 
-  function factory ($http) {
+  function factory ($rootScope) {
     var socket = io.connect('https://fathomless-falls-33454.herokuapp.com/');
     var music = document.getElementById('audio');
+    var state = {}
 
     return {
       musicList,
       setRoom,
       playSong,
+      stater,
+    }
+
+    function stater () {
+      return state
     }
 
     function setRoom (roomName) {
@@ -91,7 +97,10 @@
       if(command.command) {
         var index = index || i
         var obj = musicAll[index]
+        state = obj;
         obj.command = play
+        obj.from = command.from
+        if (command.from === "socket") $rootScope.$apply()
           socket.emit('server', {info: obj, room: socketRoom, to: 'client'})
         return obj
       }
