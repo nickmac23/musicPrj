@@ -4,7 +4,6 @@
   var fs = require('fs')
   var audioMetaData = require('audio-metadata')
   var mm = require('musicmetadata');
-  var root = '../../../Desktop/music/'
   var socketRoom = '';
   var musicAll;
   var i = 0;
@@ -18,7 +17,6 @@
     var socket = io.connect('https://fathomless-falls-33454.herokuapp.com/');
     var music = document.getElementById('audio');
 
-
     return {
       musicList,
       setRoom,
@@ -30,7 +28,6 @@
       socket.on(socketRoom + 'electron', function (data) {
         if(data != 'client wants data!'){
           playSong(data)
-          socket.emit('server', {info: 'song playing!', room: socketRoom, to: 'client'})
         } else {
             socket.emit('server', {info: musicAll, room: socketRoom, to: 'client'})
         }
@@ -38,18 +35,28 @@
     }
 
     function playSong (command) {
+      if(command.path) i = command.pageIndex
+      var play;
       switch (command.command) {
         case 'next':
           i++
           if (i > musicAll.length - 1) i = 0
-          music.src = musicAll[i].path
+          var next = document.getElementById(i)
+          next.getAttribute('path')
+          var index = next.getAttribute('index')
+          music.src = next.getAttribute('path')
           music.play()
+          play = 'playing'
           break;
         case 'back':
           i--
           if (i < 0) i = musicAll.length -1
-          music.src = musicAll[i].path
+          var back = document.getElementById(i)
+          back.getAttribute('path')
+          var index = back.getAttribute('index')
+          music.src = back.getAttribute('path')
           music.play()
+          play = 'playing'
           break;
         case 'space':
           switch (music.paused) {
@@ -58,23 +65,34 @@
                 music.src = musicAll[i].path
               }
               music.play()
+              play = 'playing'
               break;
             case false:
               music.pause()
+              play = 'paused'
               break;
           }
           break;
         case 'play':
-          if (command.index) i = command.index
+        console.log(command);
+          var index = command.index
           music.src = command.path;
           music.play()
+          play = 'playing'
           break;
       }
-      console.log(i);
+
+      if(index >= 0) {
+        var obj = musicAll[index]
+        obj.command = play
+        console.log(obj);
+          socket.emit('server', {info: obj, room: socketRoom, to: 'client'})
+        return obj
+      }
     }
 
 
-    function musicList () {
+    function musicList (root) {
       return parse(readDir(root)).then(music => musicAll = music)
     }
 
@@ -105,7 +123,6 @@
     function readDir(dir) {
       var musicList = []
       var list = fs.readdirSync(dir)
-
       for (var i = 0; i < list.length; i++) {
         if (list[i] != '.DS_Store') {
           if (fs.statSync(dir + list[i]).isDirectory()) {
