@@ -2,7 +2,6 @@
   'use strict';
 
   var fs = require('fs')
-  var audioMetaData = require('audio-metadata')
   var mm = require('musicmetadata');
   var socketRoom = '';
   var musicAll;
@@ -42,6 +41,7 @@
 
 
     function playSong (command) {
+      console.log(command);
       var listed = document.getElementById('nick').getAttribute('value')
       if(command.path) i = command.pageIndex
       var play;
@@ -100,9 +100,9 @@
         state.command = play
         state.from = command.from
         state.order = !!command.order ? command.order : state.order
-        state.search = !!command.fill ? command.fill : state.fill
+        state.search = !!command.fill || command.fill.length >= 0 ? command.fill : state.search
         if (command.from === "socket") $rootScope.$apply()
-          socket.emit('server', {info: state.music, room: socketRoom, to: 'client'})
+          socket.emit('server', {info: state, room: socketRoom, to: 'client'})
         return state
       }
     }
