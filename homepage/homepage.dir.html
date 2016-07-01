@@ -11,7 +11,7 @@
       </form>
       <div class="navbar-form navbar-right" role="search">
         <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search" ng-model='searchBy[vm.search]'>
+          <input type="text" class="form-control" placeholder="Search" ng-model='vm.state.search'>
         </div>
       </div>
       <!-- <ul class="nav navbar-nav navbar-right">
@@ -53,7 +53,7 @@
           <th ng-click='vm.orderby("genre")' ng-class='{"focus": vm.state.order === "genre"}'>genre</th>
         </tr>
       </thead>
-      <tbody ng-repeat='music in vm.list | orderBy: vm.state.order | filter: searchBy[vm.search] as filtered' >
+      <tbody ng-repeat='music in vm.list | orderBy: vm.state.order | filter: vm.state.search as filtered' >
         <div id='nick' value='{{filtered.length}}'></div>
         <tr ng-click='vm.playSong({command: "play", path: music.path, index: music.index, pageIndex: $index})'
         id={{$index}} path={{music.path}} index={{music.index}}

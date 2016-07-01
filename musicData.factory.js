@@ -100,7 +100,7 @@
         state.command = play
         state.from = command.from
         state.order = !!command.order ? command.order : state.order
-        console.log(state.order);
+        state.search = !!command.fill ? command.fill : state.fill
         if (command.from === "socket") $rootScope.$apply()
           socket.emit('server', {info: state.music, room: socketRoom, to: 'client'})
         return state

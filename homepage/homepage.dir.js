@@ -16,7 +16,6 @@
       vm.setRoom = setRoom;
       vm.playSong = playSong;
       vm.orderby = orderby;
-      vm.search = '$';
 
 
       $scope.$watch(function(){
