@@ -5,6 +5,9 @@
 
         <a class="navbar-brand">MusicPrj</a>
       </div>
+      <ul class="nav navbar-nav">
+        <li><a ng-click='vm.reset()'>Reset Music Directory</a></li>
+      </ul>
       <form class="navbar-form navbar-left" ng-submit='vm.setRoom(vm.room)' ng-hide='vm.socketRoom'>
         <input type="text" class="form-control" ng-model='vm.room' name='socketRoom' placeholder='Enter a channel'>
         <input class="btn btn-default" type='submit' value='Submit'>

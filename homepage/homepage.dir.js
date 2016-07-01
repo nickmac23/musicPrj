@@ -1,6 +1,8 @@
 (function() {
   'use strict';
 
+  var fs = require('fs')
+
   angular.module('app')
   .directive('home', directive)
   function directive () {
@@ -16,6 +18,12 @@
       vm.setRoom = setRoom;
       vm.playSong = playSong;
       vm.orderby = orderby;
+      vm.reset = reset;
+
+      function reset () {
+        fs.writeFileSync('./dataStorage.txt', '')
+        vm.list = {};
+      }
 
 
       $scope.$watch(function(){
@@ -42,20 +50,29 @@
             break;
           case 32:
             obj.command = 'space'
+            e.preventDefault();
             break;
         }
         vm.playing = musicData.playSong(obj)
         $scope.$apply();
       })
 
-      var root = document.getElementById('file')
-      root.addEventListener('change', function () {
-        var dir = root.files[0].path +  '/'
-        musicData.musicList(dir).then(function(data) {
+      var root = fs.readFileSync('./dataStorage.txt', 'utf8') || document.getElementById('file');
+      if (typeof root === 'string') {
+        musicData.musicList(root).then(function(data) {
           vm.list = data
           $scope.$apply()
         })
-      })
+      } else {
+        root.addEventListener('change', function () {
+          var dir = root.files[0].path +  '/'
+          musicData.musicList(dir).then(function(data) {
+            fs.writeFileSync('./dataStorage.txt', root.files[0].path + '/')
+            vm.list = data
+            $scope.$apply()
+          })
+        })
+      }
 
       function orderby (by) {
         vm.state.order = by

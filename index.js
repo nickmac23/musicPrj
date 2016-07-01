@@ -1,5 +1,9 @@
 const electron = require('electron')
 const app = electron.app
+const id = electron.start('prevent-display-sleep');
+console.log(powerSaveBlocker.isStarted(id));
+
+powerSaveBlocker.stop(id);
 
 const browserWindow = electron.BrowserWindow
 

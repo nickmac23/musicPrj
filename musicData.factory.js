@@ -100,7 +100,8 @@
         state.command = play
         state.from = command.from
         state.order = !!command.order ? command.order : state.order
-        state.search = !!command.fill || command.fill.length >= 0 ? command.fill : state.search
+        if (command.fill === false) state.search = ''
+        state.search = !!command.fill ? command.fill : state.search
         if (command.from === "socket") $rootScope.$apply()
           socket.emit('server', {info: state, room: socketRoom, to: 'client'})
         return state
@@ -119,7 +120,7 @@
       for (let i = 0; i < musicList.length; i++) {
         list.push(new Promise(function (resolve, reject) {
           mm(fs.createReadStream(musicList[i]), function (err, metadata) {
-            if (err) return reject(err);
+            if (err) console.log('errer', err);;
             var musicObj = {
               path: musicList[i],
               index: i,
@@ -137,6 +138,7 @@
     }
 
     function readDir(dir) {
+      console.log(dir);
       var musicList = []
       var list = fs.readdirSync(dir)
       for (var i = 0; i < list.length; i++) {
