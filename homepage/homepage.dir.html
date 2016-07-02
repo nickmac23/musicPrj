@@ -1,4 +1,110 @@
-<div>
+<img id='background' class='pic' src="./homepage/img/tree.jpg" alt="">
+<main>
+  <header id='header'>
+    <div class="media">
+      <a class="media-left" href="#">
+        <img class="media-object pic" id='small' src="./homepage/img/tree.jpg" alt="Generic placeholder image">
+      </a>
+      <div class="media-body">
+        <br>
+        <h4 class="media-heading">{{vm.state.music.title}}</h4>
+        <span>{{vm.state.music.album}}</span><span ng-repeat='artist in vm.state.music.artist'>{{artist}}</span> <span ng-repeat='genre in vm.state.music.genre'>{{genre}}</span>
+        <br>
+        <br>
+        <audio  id='audio' controls >
+          <source src="" type="audio/ogg">
+          <source src="" type="audio/mpeg">
+            Your browser does not support the audio tag.
+        </audio>
+      </div>
+      <div class='media-body list'>
+
+      <h5>
+        <span ng-click='vm.orderby("title")' ng-class='{"focus": vm.state.order === "title"}'>Title</span>
+        <span ng-click='vm.orderby("album")' ng-class='{"focus": vm.state.order === "album"}'>Album</span>
+        <span ng-click='vm.orderby("artist")' ng-class='{"focus": vm.state.order === "artist"}'>Artist</span>
+        <span ng-click='vm.orderby("genre")' ng-class='{"focus": vm.state.order === "genre"}'>Genre</span>
+      </h5>
+      </div>
+      </div>
+  </header>
+
+  <div id='content'>
+
+  <table>
+    <tbody ng-repeat='music in vm.list | orderBy: vm.state.order | filter: vm.state.search as filtered' >
+      <div id='nick' value='{{filtered.length}}'></div>
+      <tr ng-click='vm.playSong({command: "play", path: music.path, index: music.index, pageIndex: $index})'
+      id={{$index}} path={{music.path}} index={{music.index}}
+      ng-class='{"playing": vm.state.music.index === music.index}'>
+        <td>{{music.title}}</td>
+        <td>{{music.album}}</td>
+        <td ng-repeat='artist in music.artist'>{{artist}}</td>
+        <td ng-repeat='genre in music.genre'>{{genre}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+<style>
+  #content{
+    padding: 20px;
+    height: 100%;
+    overflow-y: scroll;
+    font-size: 15px;
+  }
+  td{
+    padding-bottom: 5px;
+  }
+  .media{
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom:10px;
+    border-bottom: solid white 1px;
+  }
+  .media span{
+    margin-right: 15px;
+  }
+  .list{
+    text-align: right;
+    padding-right: 10px;
+    vertical-align: bottom;
+  }
+  #background{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+  }
+  main{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.8;
+    color: white;
+  }
+  .container{
+    margin-top: 20px;
+  }
+  #small{
+    width: 120px;
+    height: 120px;
+  }
+  .focus{
+    color: rgb(249, 217, 2);
+  }
+  .playing{
+    color:rgb(249, 217, 2);
+  }
+</style>
+
+
+
+<!-- <div>
   <nav class="navbar navbar-inverse" id='nav'>
     <div class="container-fluid">
       <div class="navbar-header">
@@ -24,7 +130,7 @@
       </div>
     </div>
   </nav>
-
+  <img id='pic' src="" alt="">
 <main id="main">
 
   <div ng-hide='vm.list.length > 0'>
@@ -80,6 +186,10 @@
   #main{
     margin-top: 60px;
   }
+  table, th, tr{
+    /*opacity: 0.9;*/
+    color:black;
+  }
   .focus{
     color: red;
   }
@@ -92,5 +202,16 @@
     bottom: 0;
     width: 100%;
   }
+  #pic{
+    width: 600px;
+    height: 600px;
+    z-index: 2;
+    position: fixed;
+    top: 58px;
+    right: 100px;;
+    border: none;
+    opacity: 0.2;
 
-</style>
+  }
+
+</style> -->

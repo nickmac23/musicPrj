@@ -8,12 +8,12 @@
   var i = 0;
   var state = {}
 
-  factory.$inject = ['$rootScope'];
+  factory.$inject = ['$http'];
 
   angular.module('app')
   .factory('musicData', factory)
 
-  function factory ($rootScope) {
+  function factory ($http) {
     var socket = io.connect('https://fathomless-falls-33454.herokuapp.com/');
     var music = document.getElementById('audio');
 
@@ -22,6 +22,7 @@
       setRoom,
       playSong,
       stater,
+      getAlbumArt,
     }
 
     function stater () {
@@ -41,7 +42,6 @@
 
 
     function playSong (command) {
-      console.log(command);
       var listed = document.getElementById('nick').getAttribute('value')
       if(command.path) i = command.pageIndex
       var play;
@@ -73,11 +73,11 @@
         case 'space':
           switch (music.paused) {
             case true:
-              if (!music.src) {
-                var now = document.getElementById(0)
-                music.src = now.getAttribute('path')
-                var index = now.getAttribute('index')
-              }
+              // if (!music.src) {
+              //   var now = document.getElementById(0)
+              //   music.src = now.getAttribute('path')
+              //   var index = now.getAttribute('index')
+              // }
               music.play()
               play = 'playing'
               break;
@@ -94,7 +94,9 @@
           play = 'playing'
           break;
       }
+      console.log(i);
       if(command.command) {
+        getAlbumArt(musicAll[index])
         var index = index || i
         state.music = musicAll[index]
         state.command = play
@@ -107,6 +109,18 @@
         return state
       }
     }
+
+
+    function getAlbumArt(info){
+      var pic = document.getElementsByClassName('pic')
+      var url = `http://ws.audioscrobbler.com/2.0/?method=album.getinfo&api_key=0f06a280b3ec1c6cfcc7b6acdda80248&artist=${info.artist[0]}&album=${info.album}&format=json`
+      return $http({ method: 'GET', url: url}).then(function successCallback(response) {
+        if (response.data.album.image[4]['#text']){
+           pic[0].src = response.data.album.image[4]['#text']
+           pic[1].src = response.data.album.image[2]['#text']
+         }
+        })
+      }
 
 
     function musicList (root) {
