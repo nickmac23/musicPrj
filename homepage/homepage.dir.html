@@ -42,7 +42,7 @@
   <div id='content'>
   <input  ng-hide='vm.list.length > 0'class="btn btn-default btn-file" type="file" id='file' webkitdirectory directory multiple ></li>
 
-  <table class='table' ng-show='vm.list.length > 0'>
+  <table  ng-show='vm.list.length > 0'>
     <tbody ng-repeat='music in vm.list | orderBy: vm.state.order | filter: vm.state.search as filtered' >
       <div id='nick' value='{{filtered.length}}'></div>
       <tr ng-click='vm.playSong({command: "play", path: music.path, index: music.index, pageIndex: $index})'
@@ -50,8 +50,8 @@
       ng-class='{"playing": vm.state.music.index === music.index}'>
         <td>{{music.title}}</td>
         <td>{{music.album}}</td>
-        <td ng-repeat='artist in music.artist'>{{artist}}</td>
-        <td ng-repeat='genre in music.genre'>{{genre}}</td>
+        <td class='last' ng-repeat='artist in music.artist'>{{artist}}</td>
+        <td class='last' ng-repeat='genre in music.genre'>{{genre}}</td>
       </tr>
     </tbody>
   </table>
@@ -66,8 +66,8 @@
     font-size: 15px;
   }
   td{
-    padding-bottom: 2.5px;
-    padding-top: 2.5px;
+    padding-bottom: 4px;
+    padding-top: 4px;
   }
   .media{
     padding-left: 20px;
@@ -124,5 +124,12 @@
     text-align: right;
     font-size: 30px;
 
+  }
+  table{
+    width: 100%;
+  }
+  .last{
+    padding-right: 5px;
+    text-align: right;
   }
 </style>

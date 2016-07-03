@@ -73,17 +73,14 @@
         case 'space':
           switch (music.paused) {
             case true:
-              // if (!music.src) {
-              //   var now = document.getElementById(0)
-              //   music.src = now.getAttribute('path')
-              //   var index = now.getAttribute('index')
-              // }
               music.play()
               play = 'playing'
+              return
               break;
             case false:
               music.pause()
               play = 'paused'
+              return
               break;
           }
           break;
@@ -94,9 +91,7 @@
           play = 'playing'
           break;
       }
-      console.log(i);
       if(command.command) {
-        getAlbumArt(musicAll[index])
         var index = index || i
         state.music = musicAll[index]
         state.command = play
@@ -105,8 +100,17 @@
         if (command.fill === false) state.search = ''
         state.search = !!command.fill ? command.fill : state.search
         if (command.from === "socket") $rootScope.$apply()
+        if(!!musicAll[index]){
+          getAlbumArt(musicAll[index]).then(function (response){
+            state.image = response;
+            socket.emit('server', {info: state, room: socketRoom, to: 'client'})
+            return state
+          })
+        } else {
           socket.emit('server', {info: state, room: socketRoom, to: 'client'})
-        return state
+          return state
+
+        }
       }
     }
 
@@ -119,6 +123,7 @@
           if (response.data.album.image[4]['#text']){
              pic[0].src = response.data.album.image[4]['#text']
              pic[1].src = response.data.album.image[2]['#text']
+             return response.data.album.image[4]['#text']
            }
           })
         }
@@ -136,7 +141,7 @@
       for (let i = 0; i < musicList.length; i++) {
         list.push(new Promise(function (resolve, reject) {
           mm(fs.createReadStream(musicList[i]), function (err, metadata) {
-            if (err) console.log('errer', err);;
+            if (err) reject(err);
             var musicObj = {
               path: musicList[i],
               index: i,
@@ -154,7 +159,6 @@
     }
 
     function readDir(dir) {
-      console.log(dir);
       var musicList = []
       var list = fs.readdirSync(dir)
       for (var i = 0; i < list.length; i++) {

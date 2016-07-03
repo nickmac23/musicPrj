@@ -9,7 +9,7 @@ const browserWindow = electron.BrowserWindow
 
 app.on('ready', function () {
   var mainWindow = new browserWindow({
-    width: 1100,
+    width: 1000,
     height: 600
   })
 
