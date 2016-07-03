@@ -8,7 +8,7 @@
       <div class="media-body">
         <br>
         <h4 class="media-heading">{{vm.state.music.title}}</h4>
-        <span>{{vm.state.music.album}}</span><span ng-repeat='artist in vm.state.music.artist'>{{artist}}</span> <span ng-repeat='genre in vm.state.music.genre'>{{genre}}</span>
+        <span>{{vm.state.music.album}}</span><span ng-repeat='artist in vm.state.music.artist'>{{artist}}</span>
         <br>
         <br>
         <audio  id='audio' controls >
@@ -18,8 +18,18 @@
         </audio>
       </div>
       <div class='media-body list'>
+        <form class="inputs" ng-submit='vm.setRoom(vm.room)' ng-hide='vm.socketRoom'>
+            <div class="input-group">
+              <input type="text" class="form-control inputs" ng-model='vm.room' name='socketRoom'>
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">Set channle</button>
+              </span>
+            </div>
+        </form>
+        <a class='inputs' ng-show='vm.socketRoom' ng-click='vm.socketRoom = !vm.socketRoom' href="#">{{vm.room}}</a>
+        <input type="text" class="form-control inputs" placeholder="Search"  ng-model='vm.state.search'>
 
-      <h5>
+        <h5>
         <span ng-click='vm.orderby("title")' ng-class='{"focus": vm.state.order === "title"}'>Title</span>
         <span ng-click='vm.orderby("album")' ng-class='{"focus": vm.state.order === "album"}'>Album</span>
         <span ng-click='vm.orderby("artist")' ng-class='{"focus": vm.state.order === "artist"}'>Artist</span>
@@ -30,8 +40,9 @@
   </header>
 
   <div id='content'>
+  <input  ng-hide='vm.list.length > 0'class="btn btn-default btn-file" type="file" id='file' webkitdirectory directory multiple ></li>
 
-  <table>
+  <table class='table' ng-show='vm.list.length > 0'>
     <tbody ng-repeat='music in vm.list | orderBy: vm.state.order | filter: vm.state.search as filtered' >
       <div id='nick' value='{{filtered.length}}'></div>
       <tr ng-click='vm.playSong({command: "play", path: music.path, index: music.index, pageIndex: $index})'
@@ -55,22 +66,24 @@
     font-size: 15px;
   }
   td{
-    padding-bottom: 5px;
+    padding-bottom: 2.5px;
+    padding-top: 2.5px;
   }
   .media{
     padding-left: 20px;
     padding-top: 10px;
     padding-right: 20px;
     padding-bottom:10px;
-    border-bottom: solid white 1px;
+    /*border-bottom: solid white 1px;*/
   }
   .media span{
     margin-right: 15px;
   }
   .list{
-    text-align: right;
-    padding-right: 10px;
     vertical-align: bottom;
+  }
+  .list h5{
+    float: right;
   }
   #background{
     position: fixed;
@@ -86,6 +99,7 @@
     background-color: black;
     opacity: 0.8;
     color: white;
+    font-family:  Palatino;
   }
   .container{
     margin-top: 20px;
@@ -100,118 +114,15 @@
   .playing{
     color:rgb(249, 217, 2);
   }
+  .inputs{
+    background: black;
+    width: 200px;
+    float: right;
+    color: white;
+  }
+  a.inputs{
+    text-align: right;
+    font-size: 30px;
+
+  }
 </style>
-
-
-
-<!-- <div>
-  <nav class="navbar navbar-inverse" id='nav'>
-    <div class="container-fluid">
-      <div class="navbar-header">
-
-        <a class="navbar-brand">MusicPrj</a>
-      </div>
-      <ul class="nav navbar-nav">
-        <li><a ng-click='vm.reset()'>Reset Music Directory</a></li>
-      </ul>
-      <form class="navbar-form navbar-left" ng-submit='vm.setRoom(vm.room)' ng-hide='vm.socketRoom'>
-        <input type="text" class="form-control" ng-model='vm.room' name='socketRoom' placeholder='Enter a channel'>
-        <input class="btn btn-default" type='submit' value='Submit'>
-      </form>
-      <div class="navbar-form navbar-right" role="search">
-        <div class="form-group">
-          <input type="text" class="form-control" placeholder="Search" ng-model='vm.state.search'>
-        </div>
-      </div>
-      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
-        <ul class="nav navbar-nav navbar-right" ng-show='vm.socketRoom' ng-click='vm.socketRoom = !vm.socketRoom'>
-          <li><a href="#">{{vm.room}}</a></li>
-        </ul>
-      </div>
-    </div>
-  </nav>
-  <img id='pic' src="" alt="">
-<main id="main">
-
-  <div ng-hide='vm.list.length > 0'>
-    <ul>
-      <li> 1. <input class="btn btn-default btn-file" type="file" id='file' webkitdirectory directory multiple ></li>
-      <li>2. Enter a channle name above</li>
-    </ul>
-
-  </div>
-
-  <nav ng-if='vm.list.length > 0'>
-    <table class="table table-striped table-hover ">
-      <thead >
-        <tr class='col-lg-12 sp' id='topbar'>
-          <th ng-click='vm.orderby("title")' ng-class='{"focus": vm.state.order === "title"}'>Title</th>
-          <th ng-click='vm.orderby("artist")' ng-class='{"focus": vm.state.order === "artist"}'>Artist</th>
-          <th ng-click='vm.orderby("album")' ng-class='{"focus": vm.state.order === "album"}'>Album</th>
-          <th ng-click='vm.orderby("genre")' ng-class='{"focus": vm.state.order === "genre"}'>Genre</th>
-        </tr>
-      </thead>
-      <tbody ng-repeat='music in vm.list | orderBy: vm.state.order | filter: vm.state.search as filtered' >
-        <div id='nick' value='{{filtered.length}}'></div>
-        <tr ng-click='vm.playSong({command: "play", path: music.path, index: music.index, pageIndex: $index})'
-        id={{$index}} path={{music.path}} index={{music.index}}
-        ng-class='{"playing": vm.state.music.index === music.index}'>
-          <td>{{music.title}}</td>
-          <td ng-repeat='artist in music.artist'>{{artist}}</td>
-          <td>{{music.album}}</td>
-          <td ng-repeat='genre in music.genre'>{{genre}}</td>
-        </tr>
-      </tbody>
-    </table>
-  </nav>
-  <audio  id='audio' controls >
-    <source src="" type="audio/ogg">
-      <source src="" type="audio/mpeg">
-        Your browser does not support the audio tag.
-      </audio>
-</div>
-
-</main>
-
-<style>
-  input.btn, input.form-control{
-    border: red solid 1px;
-  }
-  #nav{
-    position:fixed;
-    top: 0;
-    left: 0;
-    width:100%;
-  }
-  #main{
-    margin-top: 60px;
-  }
-  table, th, tr{
-    /*opacity: 0.9;*/
-    color:black;
-  }
-  .focus{
-    color: red;
-  }
-  .playing{
-    color:red;
-  }
-  #audio{
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    width: 100%;
-  }
-  #pic{
-    width: 600px;
-    height: 600px;
-    z-index: 2;
-    position: fixed;
-    top: 58px;
-    right: 100px;;
-    border: none;
-    opacity: 0.2;
-
-  }
-
-</style> -->
