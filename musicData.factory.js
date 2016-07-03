@@ -43,6 +43,7 @@
 
     function playSong (command) {
       console.log(command);
+      state.image = state.image
       state.volume = music.volume
       var listed = document.getElementById('nick').getAttribute('value')
       if(command.path) i = command.pageIndex
@@ -50,6 +51,8 @@
       switch (command.command) {
         case 'volume':
           state.volume = command.val
+          music.volume = state.volume
+          return
         break
         case 'reset':
           i = -1
@@ -94,6 +97,7 @@
 
         case 'play':
           var index = command.index
+          i = index
           music.src = command.path;
           music.play()
           play = 'playing'
@@ -102,14 +106,14 @@
       if(command.command) {
         var index = index || i
         music.volume = state.volume;
-        state.music = musicAll[index]
+        state.music = musicAll[index] || state.music
         state.command = play
         state.from = command.from
         state.order = !!command.order ? command.order : state.order
         if (command.fill === false) state.search = ''
         state.search = !!command.fill ? command.fill : state.search
         if (command.from === "socket") $rootScope.$apply()
-        if(!!musicAll[index]){
+        if(!!state.music){
           getAlbumArt(musicAll[index]).then(function (response){
             state.image = response;
             socket.emit('server', {info: state, room: socketRoom, to: 'client'})
@@ -118,7 +122,6 @@
         } else {
           socket.emit('server', {info: state, room: socketRoom, to: 'client'})
           return state
-
         }
       }
     }
