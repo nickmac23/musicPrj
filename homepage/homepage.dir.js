@@ -42,7 +42,6 @@
       })
 
       document.addEventListener('keydown', function (e){
-        console.log(vm.state);
         var obj = {}
         switch (e.which) {
           case 39:

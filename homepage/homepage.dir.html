@@ -6,16 +6,21 @@
         <img class="media-object pic" id='small' src="./homepage/img/tree.jpg" alt="Generic placeholder image">
       </a>
       <div class="media-body">
-        <br>
-        <h4 class="media-heading">{{vm.state.music.title}}</h4>
-        <span>{{vm.state.music.album}}</span><span ng-repeat='artist in vm.state.music.artist'>{{artist}}</span>
-        <br>
-        <br>
-        <audio  id='audio' controls >
-          <source src="" type="audio/ogg">
-          <source src="" type="audio/mpeg">
-            Your browser does not support the audio tag.
-        </audio>
+
+          <br>
+          <h4 class="media-heading">{{vm.state.music.title}}</h4>
+          <span>{{vm.state.music.album}}</span><span ng-repeat='artist in vm.state.music.artist'>{{artist}}</span>
+          <br>
+          <br>
+          <audio  id='audio' controls >
+            <source src="" type="audio/ogg">
+            <source src="" type="audio/mpeg">
+              Your browser does not support the audio tag.
+          </audio>
+          <div class="arrows">
+            <span class="glyphicon glyphicon-backward" aria-hidden="true" ng-click='vm.playSong({command: "back"})'></span>
+            <span class="glyphicon glyphicon-forward" aria-hidden="true" ng-click='vm.playSong({command: "next"})'></span>
+          </div>
       </div>
       <div class='media-body list'>
         <form class="inputs" ng-submit='vm.setRoom(vm.room)' ng-hide='vm.socketRoom'>
@@ -59,6 +64,12 @@
 
 </main>
 <style>
+
+  .arrows{
+    padding-right: 50px;
+    float:right;
+    font-size: 20px;
+  }
   #content{
     padding: 20px;
     height: 100%;
@@ -79,10 +90,16 @@
   .media span{
     margin-right: 15px;
   }
+  .media-body{
+    /*border: white 1px solid;*/
+
+  }
   .list{
+    /*border: white 1px solid;*/
     vertical-align: bottom;
   }
   .list h5{
+
     float: right;
   }
   #background{

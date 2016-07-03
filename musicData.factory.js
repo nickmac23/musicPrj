@@ -42,10 +42,15 @@
 
 
     function playSong (command) {
+      console.log(command);
+      state.volume = music.volume
       var listed = document.getElementById('nick').getAttribute('value')
       if(command.path) i = command.pageIndex
       var play;
       switch (command.command) {
+        case 'volume':
+          state.volume = command.val
+        break
         case 'reset':
           i = -1
           return command.by
@@ -73,17 +78,20 @@
         case 'space':
           switch (music.paused) {
             case true:
+              state.command = 'playing'
+              socket.emit('server', {info: state, room: socketRoom, to: 'client'})
               music.play()
-              play = 'playing'
               return
               break;
             case false:
+              state.command = 'pause'
+              socket.emit('server', {info: state, room: socketRoom, to: 'client'})
               music.pause()
-              play = 'paused'
               return
               break;
           }
           break;
+
         case 'play':
           var index = command.index
           music.src = command.path;
@@ -93,6 +101,7 @@
       }
       if(command.command) {
         var index = index || i
+        music.volume = state.volume;
         state.music = musicAll[index]
         state.command = play
         state.from = command.from
