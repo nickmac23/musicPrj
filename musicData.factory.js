@@ -45,6 +45,7 @@
       state.image = state.image
       state.volume = music.volume
       var listed = document.getElementById('nick').getAttribute('value')
+      console.log(listed);
       if(command.path) i = command.pageIndex
       var play;
       switch (command.command) {
