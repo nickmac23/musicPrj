@@ -53,7 +53,6 @@
       root.addEventListener('change', function () {
         var dir = root.files[0].path +  '/'
         musicData.musicList(dir).then(function(data) {
-          fs.writeFileSync('./dataStorage.txt', root.files[0].path + '/')
           vm.list = data
           $scope.$apply()
         })
