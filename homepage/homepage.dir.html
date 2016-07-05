@@ -22,7 +22,8 @@
             <span class="glyphicon glyphicon-forward" aria-hidden="true" ng-click='vm.playSong({command: "next"})'></span>
           </div>
       </div>
-      <div class='media-body list'>
+      <div class='media-right list'>
+        <h6>By Nick MacIntyre</h6>
         <form class="inputs" ng-submit='vm.setRoom(vm.room)' ng-hide='vm.socketRoom'>
             <div class="input-group">
               <input type="text" class="form-control inputs" ng-model='vm.room' name='socketRoom'>
@@ -89,9 +90,9 @@
   .media span{
     margin-right: 15px;
   }
-  .media-body{
-    /*border: white 1px solid;*/
-
+  .media-right{
+    width: 25%;
+    text-align: right;
   }
   .list{
     vertical-align: bottom;
