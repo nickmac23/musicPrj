@@ -42,7 +42,6 @@
 
 
     function playSong (command) {
-      console.log(command);
       state.image = state.image
       state.volume = music.volume
       var listed = document.getElementById('nick').getAttribute('value')

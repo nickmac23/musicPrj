@@ -1,0 +1,150 @@
+<img id='background' class='pic' src="./homepage/img/tree.jpg" alt="">
+<main>
+  <header id='header'>
+    <div class="media">
+      <a class="media-left" href="#">
+        <img class="media-object pic" id='small' src="./homepage/img/tree.jpg" alt="Generic placeholder image">
+      </a>
+      <div class="media-body">
+
+          <br>
+          <h4 class="media-heading">{{vm.state.music.title}}</h4>
+          <span>{{vm.state.music.album}}</span><span ng-repeat='artist in vm.state.music.artist'>{{artist}}</span>
+          <br>
+          <br>
+          <audio  id='audio' controls >
+            <source src="" type="audio/ogg">
+            <source src="" type="audio/mpeg">
+              Your browser does not support the audio tag.
+          </audio>
+          <div class="arrows">
+            <span class="glyphicon glyphicon-backward" aria-hidden="true" ng-click='vm.playSong({command: "back"})'></span>
+            <span class="glyphicon glyphicon-forward" aria-hidden="true" ng-click='vm.playSong({command: "next"})'></span>
+          </div>
+      </div>
+      <div class='media-body list'>
+        <form class="inputs" ng-submit='vm.setRoom(vm.room)' ng-hide='vm.socketRoom'>
+            <div class="input-group">
+              <input type="text" class="form-control inputs" ng-model='vm.room' name='socketRoom'>
+              <span class="input-group-btn">
+                <button class="btn btn-default" type="submit">Set channle</button>
+              </span>
+            </div>
+        </form>
+        <a class='inputs' ng-show='vm.socketRoom' ng-click='vm.socketRoom = !vm.socketRoom' href="#">{{vm.room}}</a>
+        <input type="text" class="form-control inputs" placeholder="Search"  ng-model='vm.state.search'>
+
+        <h5>
+        <span ng-click='vm.orderby("title")' ng-class='{"focus": vm.state.order === "title"}'>Title</span>
+        <span ng-click='vm.orderby("album")' ng-class='{"focus": vm.state.order === "album"}'>Album</span>
+        <span ng-click='vm.orderby("artist")' ng-class='{"focus": vm.state.order === "artist"}'>Artist</span>
+        <span ng-click='vm.orderby("genre")' ng-class='{"focus": vm.state.order === "genre"}'>Genre</span>
+      </h5>
+      </div>
+      </div>
+  </header>
+
+  <div id='content'>
+  <input  ng-hide='vm.list.length > 0'class="btn btn-default btn-file" type="file" id='file' webkitdirectory directory multiple ></li>
+
+  <table  ng-show='vm.list.length > 0'>
+    <tbody ng-repeat='music in vm.list | orderBy: vm.state.order | filter: vm.state.search as filtered' >
+      <div id='nick' value='{{filtered.length}}'></div>
+      <tr ng-click='vm.playSong({command: "play", path: music.path, index: music.index, pageIndex: $index})'
+      id={{$index}} path={{music.path}} index={{music.index}}
+      ng-class='{"playing": vm.state.music.index === music.index}'>
+        <td>{{music.title}}</td>
+        <td>{{music.album}}</td>
+        <td class='last' ng-repeat='artist in music.artist'>{{artist}}</td>
+        <td class='last' ng-repeat='genre in music.genre'>{{genre}}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</main>
+<style>
+
+  .arrows{
+    padding-right: 50px;
+    float:right;
+    font-size: 20px;
+  }
+  #content{
+    padding: 20px;
+    height: 100%;
+    overflow-y: scroll;
+    font-size: 15px;
+  }
+  td{
+    padding-bottom: 4px;
+    padding-top: 4px;
+  }
+  .media{
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-right: 20px;
+    padding-bottom:10px;
+  }
+  .media span{
+    margin-right: 15px;
+  }
+  .media-body{
+    /*border: white 1px solid;*/
+
+  }
+  .list{
+    vertical-align: bottom;
+  }
+  .list h5{
+
+    float: right;
+  }
+  #background{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: -1;
+  }
+  main{
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    opacity: 0.8;
+    color: white;
+    font-family:  Palatino;
+  }
+  .container{
+    margin-top: 20px;
+  }
+  #small{
+    width: 120px;
+    height: 120px;
+  }
+  .focus{
+    color: rgb(249, 217, 2);
+  }
+  .playing{
+    color:rgb(249, 217, 2);
+  }
+  .inputs{
+    background: black;
+    width: 200px;
+    float: right;
+    color: white;
+  }
+  a.inputs{
+    text-align: right;
+    font-size: 30px;
+
+  }
+  table{
+    width: 100%;
+  }
+  .last{
+    padding-right: 5px;
+    text-align: right;
+  }
+</style>
