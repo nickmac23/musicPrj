@@ -18,8 +18,8 @@
               Your browser does not support the audio tag.
           </audio>
           <div class="arrows">
-            <span class="glyphicon glyphicon-backward" aria-hidden="true" ng-click='vm.playSong({command: "back"})'></span>
-            <span class="glyphicon glyphicon-forward" aria-hidden="true" ng-click='vm.playSong({command: "next"})'></span>
+            <span class="glyphicon glyphicon-backward hoveron" aria-hidden="true" ng-click='vm.playSong({command: "back"})'></span>
+            <span class="glyphicon glyphicon-forward hoveron" aria-hidden="true" ng-click='vm.playSong({command: "next"})'></span>
           </div>
       </div>
       <div class='media-right list'>
@@ -36,10 +36,10 @@
         <input type="text" class="form-control inputs" placeholder="Search"  ng-model='vm.state.search'>
 
         <h5>
-        <span ng-click='vm.orderby("title")' ng-class='{"focus": vm.state.order === "title"}'>Title</span>
-        <span ng-click='vm.orderby("album")' ng-class='{"focus": vm.state.order === "album"}'>Album</span>
-        <span ng-click='vm.orderby("artist")' ng-class='{"focus": vm.state.order === "artist"}'>Artist</span>
-        <span ng-click='vm.orderby("genre")' ng-class='{"focus": vm.state.order === "genre"}'>Genre</span>
+        <span class='hoveron' ng-click='vm.orderby("title")' ng-class='{"focus": vm.state.order === "title"}'>Title</span>
+        <span class='hoveron' ng-click='vm.orderby("album")' ng-class='{"focus": vm.state.order === "album"}'>Album</span>
+        <span class='hoveron' ng-click='vm.orderby("artist")' ng-class='{"focus": vm.state.order === "artist"}'>Artist</span>
+        <span class='hoveron' ng-click='vm.orderby("genre")' ng-class='{"focus": vm.state.order === "genre"}'>Genre</span>
       </h5>
       </div>
       </div>
@@ -53,9 +53,10 @@
       <div id='nick' value='{{filtered.length}}'></div>
       <tr ng-click='vm.playSong({command: "play", path: music.path, index: music.index, pageIndex: $index})'
       id={{$index}} path={{music.path}} index={{music.index}}
+      class='hoveron'
       ng-class='{"playing": vm.state.music.index === music.index}'>
-        <td>{{music.title}}</td>
-        <td>{{music.album}}</td>
+        <td >{{music.title}}</td>
+        <td class='first'>{{music.album}}</td>
         <td class='last' ng-repeat='artist in music.artist'>{{artist}}</td>
         <td class='last' ng-repeat='genre in music.genre'>{{genre}}</td>
       </tr>
@@ -74,12 +75,14 @@
   #content{
     padding: 20px;
     height: 100%;
+    width: 100%;
     overflow-y: scroll;
     font-size: 15px;
   }
-  td{
-    padding-bottom: 4px;
-    padding-top: 4px;
+
+  .hoveron:hover{
+    opacity: 0.5;
+    cursor: pointer;
   }
   .media{
     padding-left: 20px;
@@ -98,7 +101,6 @@
     vertical-align: bottom;
   }
   .list h5{
-
     float: right;
   }
   #background{
@@ -119,6 +121,7 @@
   }
   .container{
     margin-top: 20px;
+    width: 100%;
   }
   #small{
     width: 120px;
@@ -139,13 +142,23 @@
   a.inputs{
     text-align: right;
     font-size: 30px;
-
   }
   table{
     width: 100%;
+    table-layout:fixed;
   }
   .last{
-    padding-right: 5px;
+    padding-right: 10px;
     text-align: right;
+  }
+  .first{
+    padding-left: 10px;
+  }
+  td{
+    padding-top: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    width: 25%;
+    text-overflow: ellipsis;
   }
 </style>
