@@ -143,27 +143,31 @@
 
 
     function musicList (root) {
-      return parse(readDir(root)).then(music => musicAll = music)
+      var k = 0
+      return parse(readDir(root)).then(music => musicAll = music.filter(function (item){
+        if(!!item.title){
+          item.index = k
+          k++
+          return item
+        }
+      }))
     }
 
     function parse (musicList) {
       var list = []
       var music;
-
       for (let i = 0; i < musicList.length; i++) {
         list.push(new Promise(function (resolve, reject) {
           mm(fs.createReadStream(musicList[i]), function (err, metadata) {
-            if (err) reject(err);
-            var musicObj = {
-              path: musicList[i],
-              index: i,
-              title: metadata.title,
-              genre: metadata.genre,
-              album: metadata.album,
-              artist: metadata.artist,
-              year: metadata.year,
-            }
-            resolve(musicObj)
+              var musicObj = {
+                path: musicList[i],
+                title: metadata.title,
+                genre: metadata.genre,
+                album: metadata.album,
+                artist: metadata.artist,
+                year: metadata.year,
+              }
+              resolve(musicObj)
           })
         }))
       }
