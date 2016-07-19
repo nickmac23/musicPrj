@@ -8,3 +8,5 @@ Setup:
 Ionic app moblie repo: https://github.com/nickmac23/ioncMusicPrj
 
 Webclient Repo: https://github.com/nickmac23/WebClientMusicPrj
+
+![bluePrint](/homepage/img/bluePrint.png)
